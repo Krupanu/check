@@ -49,4 +49,5 @@ public class Item {
     public void setWholeSale(Boolean wholeSale) {
         IsWholeSale = wholeSale;
     }
+
 }

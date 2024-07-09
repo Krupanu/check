@@ -5,11 +5,13 @@ import Abstractions.IDataProvider;
 
 public class CheckRunner {
     public static void main(String[] args) {
-        IDataProvider<Item> itemsDataProvider = new DumbStoreDataProvider();
+//        IDataProvider<Item> itemsDataProvider = new DumbStoreDataProvider();
         var idQuantityMap = new HashMap<Integer, Integer>();
         var order = new Order();
         var csvFileItemDataProvider = new CsvFileItemDataProvider("C:\\github\\check\\src\\main\\resources\\products.csv");
-
+//        var csvFileDiscountDataProvider = new CsvFileDiscountDataProvider("C:\\github\\check\\src\\main\\resources\\discountCards.csv");
+        //сделать вывод данных, обработчик на колличества запросов, разобраться с скидочными картами,
+        //подключить ввод через консоль(удалить DumbStore...), написать записку
         for (String arg : args) {
             //Parse items and quantity
             if (arg.contains("-")) {
@@ -44,9 +46,10 @@ public class CheckRunner {
             order.AddItem(new OrderItem(csvFileItemDataProvider.Get(entry.getKey()), entry.getValue()));
         }
 
-        order.CalculateOrder();
-        var detailsWriterExcel = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\productsTest.csv");
-        var detailsWriterTxt = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\result.csv.txt");
+//        order.CalculateOrder();
+        var detailsWriterExcel = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\productsTest.csv",idQuantityMap);
+        var detailsWriterTxt = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\result.csv.txt",idQuantityMap);
+
         detailsWriterTxt.Write(order);
         detailsWriterExcel.Write(order);
 //        detailsWriter.WriteOrder();

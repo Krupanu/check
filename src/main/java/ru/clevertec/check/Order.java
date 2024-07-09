@@ -21,7 +21,42 @@ public class Order {
         Items.add(item);
     }
 
-    public void CalculateOrder() {
+//    public void CalculateOrder() {
+//        var wholeSaleDiscount = new WholeSaleDiscount();
+//        var cardDiscount = new CardDiscount(DiscountCard);
+//
+//        for (OrderItem item : Items) {
+//            if (wholeSaleDiscount.CanBeApplied(item)) {
+//                wholeSaleDiscount.Apply(item);
+//            } else {
+//                if (cardDiscount.CanBeApplied(item)) {
+//                    cardDiscount.Apply(item);
+//                }
+//            }
+//
+//            TotalPrice += item.GetFullPrice();
+//            TotalDiscount += item.DiscountPrice;
+//        }
+//    }
+public double CalculateTotalPrice() {
+    var wholeSaleDiscount = new WholeSaleDiscount();
+    var cardDiscount = new CardDiscount(DiscountCard);
+
+    for (OrderItem item : Items) {
+        if (wholeSaleDiscount.CanBeApplied(item)) {
+            wholeSaleDiscount.Apply(item);
+        } else {
+            if (cardDiscount.CanBeApplied(item)) {
+                cardDiscount.Apply(item);
+            }
+        }
+
+        TotalPrice += item.GetFullPrice();
+    }
+
+    return TotalPrice;
+}
+    public double CalculateTotalItemPrice() {
         var wholeSaleDiscount = new WholeSaleDiscount();
         var cardDiscount = new CardDiscount(DiscountCard);
 
@@ -34,12 +69,54 @@ public class Order {
                 }
             }
 
-            TotalPrice += item.GetFullPrice();
+            TotalPrice = item.GetFullPrice();
+        }
+
+        return TotalPrice;
+    }
+
+    public double CalculateTotalDiscount() {
+        var wholeSaleDiscount = new WholeSaleDiscount();
+        var cardDiscount = new CardDiscount(DiscountCard);
+
+        for (OrderItem item : Items) {
+            if (wholeSaleDiscount.CanBeApplied(item)) {
+                wholeSaleDiscount.Apply(item);
+            } else {
+                if (cardDiscount.CanBeApplied(item)) {
+                    cardDiscount.Apply(item);
+                }
+            }
+
             TotalDiscount += item.DiscountPrice;
         }
-//        var detailsWriterTxt = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\result.csv.txt");
-//        if(Balance < (TotalPrice - TotalDiscount)) {
-//            detailsWriterTxt.WriteNoBalance();
-//        }
+
+        return TotalDiscount;
+    }
+    public double CalculateTotalItemDiscount() {
+        var wholeSaleDiscount = new WholeSaleDiscount();
+        var cardDiscount = new CardDiscount(DiscountCard);
+
+        for (OrderItem item : Items) {
+            if (wholeSaleDiscount.CanBeApplied(item)) {
+                wholeSaleDiscount.Apply(item);
+            } else {
+                if (cardDiscount.CanBeApplied(item)) {
+                    cardDiscount.Apply(item);
+                }
+            }
+
+            TotalDiscount = item.DiscountPrice;
+        }
+
+        return TotalDiscount;
+    }
+    public Item GetItemById(int id) {
+        for (OrderItem orderItem : Items) {
+            if (orderItem.getItem().getId() == id) {
+                return orderItem.getItem();
+            }
+        }
+        return null;
     }
 }

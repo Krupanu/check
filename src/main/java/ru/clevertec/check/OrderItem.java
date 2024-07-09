@@ -11,5 +11,8 @@ public class OrderItem {
     public double GetFullPrice() {
         return Item.getPrice() * Amount;
     }
+    public Item getItem() {
+        return Item;
+    }
     public double DiscountPrice;
 }
