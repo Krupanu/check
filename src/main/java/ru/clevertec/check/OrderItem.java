@@ -9,8 +9,10 @@ public class OrderItem {
     public Item Item;
     public int Amount;
     public double GetFullPrice() {
-        return Item.getPrice() * Amount;
+        double fullPrice = Item.getPrice() * Amount;
+        return fullPrice;
     }
+
     public Item getItem() {
         return Item;
     }

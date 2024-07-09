@@ -29,14 +29,15 @@ public class OrderDetailsToCsvWriter implements IOrderDetailsWriter {
                     + ";" + order.CreatedDate.getHours() + ":" + order.CreatedDate.getMinutes() + ":" + order.CreatedDate.getSeconds());
             printWriter.println("");
             printWriter.println("QTU;DESCRIPTION;PRICE;DISCOUNT;TOTAL");
-
+            int amountOfLoops = 0;
             for (Map.Entry<Integer, Integer> entry : idQuantityMap.entrySet()) {
                 int key = entry.getKey();
                 int quantity = entry.getValue();
                 Item item = order.GetItemById(key);
                 var discount = DiscountCards.Discounts.get(order.DiscountCard) * 100;
                 var df = new DecimalFormat("0.00");
-                printWriter.println(quantity + ";" + item.getDescription() + ";" + df.format(item.getPrice()) + "$;" + df.format(order.CalculateTotalItemDiscount()) + "$;" + df.format(order.CalculateTotalItemPrice()) + "$");
+                printWriter.println(quantity + ";" + item.getDescription() + ";" + df.format(item.getPrice()) + "$;" + df.format(order.CalculateTotalItemDiscount(amountOfLoops)) + "$;" + df.format(order.CalculateTotalItemPrice(amountOfLoops)) + "$");
+                amountOfLoops++;
             }
             printWriter.println("");
             printWriter.println("TOTAL PRICE;TOTAL DISCOUNT;TOTAL WITH DISCOUNT");
