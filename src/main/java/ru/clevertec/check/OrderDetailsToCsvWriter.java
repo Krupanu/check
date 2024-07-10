@@ -54,7 +54,7 @@ public class OrderDetailsToCsvWriter implements IOrderDetailsWriter {
             printWriter.close();
         } catch (FileNotFoundException e) {
             System.out.println("ERROR");
-            String exceptionResultFilePath = "C:\\github\\check";
+            String exceptionResultFilePath = "C:\\github\\check\\errorResult.csv.txt";
             String fileName = "errorResult.csv.txt";
             String fullPath = Paths.get(exceptionResultFilePath, fileName).toString();
             String textToFile = "BAD REQUEST";
