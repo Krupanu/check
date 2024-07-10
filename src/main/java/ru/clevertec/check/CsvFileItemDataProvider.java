@@ -19,12 +19,18 @@ public class CsvFileItemDataProvider implements IDataProvider<Item> {
     private void ReadFile(String path) {
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
+            br.readLine();
             while ((line = br.readLine()) != null) {
-
                 String separator = ";";
                 String[] values = line.split(separator);
 
-                _items.put(Integer.parseInt(values[0]), new Item(Integer.parseInt(values[0]), values[1], Double.parseDouble(values[2]), Boolean.parseBoolean(values[3])));
+                int id = Integer.parseInt(values[0]);
+                String description = values[1];
+                double price = Double.parseDouble(values[2]);
+                int quantityInStock = Integer.parseInt(values[3]);
+                boolean wholesaleProduct = Boolean.parseBoolean(values[4]);
+
+                _items.put(id, new Item(id, description, price, quantityInStock, wholesaleProduct));
             }
 
         } catch (IOException e) {

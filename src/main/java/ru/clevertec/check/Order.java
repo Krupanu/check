@@ -1,6 +1,5 @@
 package main.java.ru.clevertec.check;
 
-
 import main.java.ru.clevertec.check.Discounts.CardDiscount;
 import main.java.ru.clevertec.check.Discounts.WholeSaleDiscount;
 
@@ -21,45 +20,34 @@ public class Order {
         Items.add(item);
     }
 
-
-    public double CalculateTotalItemPrice(int amountOfLoops) {
-        double TotalPrice = 0.00;
+    public double CalculateTotalItemPrice(OrderItem orderItem) {
+        double totalPrice = 0.00;
         var wholeSaleDiscount = new WholeSaleDiscount();
         var cardDiscount = new CardDiscount(DiscountCard);
 
-            if (wholeSaleDiscount.CanBeApplied(Items.get(amountOfLoops))) {
-                wholeSaleDiscount.Apply(Items.get(amountOfLoops));
-            } else {
-                if (cardDiscount.CanBeApplied(Items.get(amountOfLoops))) {
-                    cardDiscount.Apply(Items.get(amountOfLoops));
-                }
-
-
-            TotalPrice = Items.get(amountOfLoops).GetFullPrice();
+        if (wholeSaleDiscount.CanBeApplied(orderItem)) {
+            wholeSaleDiscount.Apply(orderItem);
+        } else if (cardDiscount.CanBeApplied(orderItem)) {
+            cardDiscount.Apply(orderItem);
         }
 
-        return TotalPrice;
+        totalPrice = orderItem.GetFullPrice();
+        return totalPrice;
     }
 
-
-    public double CalculateTotalItemDiscount(int amountOfLoops) {
+    public double CalculateTotalItemDiscount(OrderItem orderItem) {
         var wholeSaleDiscount = new WholeSaleDiscount();
         var cardDiscount = new CardDiscount(DiscountCard);
 
-
-            if (wholeSaleDiscount.CanBeApplied(Items.get(amountOfLoops))) {
-                wholeSaleDiscount.Apply(Items.get(amountOfLoops));
-            } else {
-                if (cardDiscount.CanBeApplied(Items.get(amountOfLoops))) {
-                    cardDiscount.Apply(Items.get(amountOfLoops));
-                }
-
-
-            TotalDiscount = Items.get(amountOfLoops).DiscountPrice;
+        if (wholeSaleDiscount.CanBeApplied(orderItem)) {
+            wholeSaleDiscount.Apply(orderItem);
+        } else if (cardDiscount.CanBeApplied(orderItem)) {
+            cardDiscount.Apply(orderItem);
         }
 
-        return TotalDiscount;
+        return orderItem.DiscountPrice;
     }
+
     public Item GetItemById(int id) {
         for (OrderItem orderItem : Items) {
             if (orderItem.getItem().getId() == id) {
@@ -69,59 +57,3 @@ public class Order {
         return null;
     }
 }
-
-
-//    public void CalculateOrder() {
-//        var wholeSaleDiscount = new WholeSaleDiscount();
-//        var cardDiscount = new CardDiscount(DiscountCard);
-//
-//        for (OrderItem item : Items) {
-//            if (wholeSaleDiscount.CanBeApplied(item)) {
-//                wholeSaleDiscount.Apply(item);
-//            } else {
-//                if (cardDiscount.CanBeApplied(item)) {
-//                    cardDiscount.Apply(item);
-//                }
-//            }
-//
-//            TotalPrice += item.GetFullPrice();
-//            TotalDiscount += item.DiscountPrice;
-//        }
-//    }
-//public double CalculateTotalPrice() {
-//    var wholeSaleDiscount = new WholeSaleDiscount();
-//    var cardDiscount = new CardDiscount(DiscountCard);
-//    double TotalPrice = 0.00;
-//    for (OrderItem item : Items) {
-//
-//        if (wholeSaleDiscount.CanBeApplied(item)) {
-//            wholeSaleDiscount.Apply(item);
-//        } else {
-//            if (cardDiscount.CanBeApplied(item)) {
-//                cardDiscount.Apply(item);
-//            }
-//        }
-//
-//        TotalPrice += item.GetFullPrice();
-//    }
-//
-//    return TotalPrice;
-//}
-//    public double CalculateTotalDiscount() {
-//        var wholeSaleDiscount = new WholeSaleDiscount();
-//        var cardDiscount = new CardDiscount(DiscountCard);
-//
-//        for (OrderItem item : Items) {
-//            if (wholeSaleDiscount.CanBeApplied(item)) {
-//                wholeSaleDiscount.Apply(item);
-//            } else {
-//                if (cardDiscount.CanBeApplied(item)) {
-//                    cardDiscount.Apply(item);
-//                }
-//            }
-//
-//            TotalDiscount += item.DiscountPrice;
-//        }
-//
-//        return TotalDiscount;
-//    }

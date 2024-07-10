@@ -17,5 +17,5 @@ public class WholeSaleDiscount implements IDiscount {
         item.DiscountPrice = item.GetFullPrice() * _discount;
     }
 
-
+    //
 }

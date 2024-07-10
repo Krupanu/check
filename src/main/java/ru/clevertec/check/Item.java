@@ -3,11 +3,12 @@ package main.java.ru.clevertec.check;
 
 public class Item {
 
-    public Item(Integer id, String description, Double price, Boolean isWholeSale) {
+    public Item(Integer id, String description, Double price,Integer quantityInStock, Boolean isWholeSale) {
         Id = id;
         Description = description;
         Price = price;
         IsWholeSale = isWholeSale;
+        QuantityInStock = quantityInStock;
     }
 
     private Integer Id;
@@ -15,6 +16,7 @@ public class Item {
     private String Description;
 
     private Double Price;
+    private Integer QuantityInStock;
 
     private Boolean IsWholeSale;
 

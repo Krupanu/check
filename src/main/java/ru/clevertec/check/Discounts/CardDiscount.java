@@ -24,3 +24,5 @@ public class CardDiscount implements IDiscount {
         item.DiscountPrice = item.GetFullPrice() * (discount == null ? _defaultDiscount : discount);
     }
 }
+
+//

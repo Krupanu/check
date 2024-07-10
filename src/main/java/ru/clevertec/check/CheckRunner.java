@@ -11,8 +11,8 @@ public class CheckRunner {
             var order = new Order();
             var csvFileItemDataProvider = new CsvFileItemDataProvider("C:\\github\\check\\src\\main\\resources\\products.csv");
 //        var csvFileDiscountDataProvider = new CsvFileDiscountDataProvider("C:\\github\\check\\src\\main\\resources\\discountCards.csv");
-            //сделать вывод данных, разобраться с скидочными картами,
-            //подключить ввод через консоль(удалить DumbStore...), написать записку, проверить выход при ошибке в конце main
+            //сделать вывод данных, разобраться с скидочными картами, разобраться с 0.03 вместо 0.30 в скидке за бананы
+            //подключить ввод через консоль(удалить DumbStore...), написать записку
             for (String arg : args) {
                 //Parse items and quantity
                 if (arg.contains("-")) {

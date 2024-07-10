@@ -8,6 +8,7 @@ public class OrderItem {
 
     public Item Item;
     public int Amount;
+    public double DiscountPrice;
     public double GetFullPrice() {
         double fullPrice = Item.getPrice() * Amount;
         return fullPrice;
@@ -16,5 +17,4 @@ public class OrderItem {
     public Item getItem() {
         return Item;
     }
-    public double DiscountPrice;
 }
