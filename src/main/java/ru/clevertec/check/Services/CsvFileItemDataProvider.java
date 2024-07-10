@@ -1,8 +1,10 @@
-package main.java.ru.clevertec.check;
-import Abstractions.IDataProvider;
+package main.java.ru.clevertec.check.Services;
+import main.java.ru.clevertec.check.Abstractions.IDataProvider;
+import main.java.ru.clevertec.check.Abstractions.ILogger;
+import main.java.ru.clevertec.check.Constants.ErrorCodes;
+import main.java.ru.clevertec.check.Models.Item;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -12,13 +14,18 @@ import java.util.List;
 public class CsvFileItemDataProvider implements IDataProvider<Item> {
 
     private final HashMap<Integer, Item> _items;
+    private final ILogger _logger;
 
-    public CsvFileItemDataProvider(String path) {
+    public CsvFileItemDataProvider(String path, ILogger logger) {
         _items = new HashMap<>();
+        _logger = logger;
+        
         ReadFile(path);
     }
 
     private void ReadFile(String path) {
+        _logger.logInfo("Reading from an items file started");
+        
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             br.readLine();
@@ -35,15 +42,11 @@ public class CsvFileItemDataProvider implements IDataProvider<Item> {
                 _items.put(id, new Item(id, description, price, quantityInStock, wholesaleProduct));
             }
 
+            _logger.logInfo("Reading from an items file ended");
+            _logger.logInfo("");
         } catch (IOException e) {
-            System.out.println("ERROR");
-            String exceptionResultFilePath = "C:\\github\\check";
-            String fileName = "result.csv.txt";
-            String fullPath = Paths.get(exceptionResultFilePath, fileName).toString();
-            String textToFile = "BAD REQUEST";
-            var exceptionWriter = new ExceptionWriter();
-            exceptionWriter.WriteExceptionToCsv("BAD REQUEST",exceptionResultFilePath);
-            System.out.println("Data has been written");
+            _logger.logInfo("Error while reading items file");
+            _logger.logError(ErrorCodes.InternalServerError);
             System.exit(0);
         }
     }

@@ -1,4 +1,4 @@
-package Abstractions;
+package main.java.ru.clevertec.check.Abstractions;
 
 import java.util.List;
 

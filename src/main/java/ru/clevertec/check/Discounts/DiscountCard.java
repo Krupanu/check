@@ -1,10 +1,10 @@
 package main.java.ru.clevertec.check.Discounts;
 
-public class DiscountCards {
+public class DiscountCard {
     private final String _discountCardNumber;
     private final int _discountPercentage;
 
-    public DiscountCards(String discountCardNumber, int discountPercentage) {
+    public DiscountCard(String discountCardNumber, int discountPercentage) {
         _discountCardNumber = discountCardNumber;
         _discountPercentage = discountPercentage;
     }

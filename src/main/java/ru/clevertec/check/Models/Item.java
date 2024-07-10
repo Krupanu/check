@@ -1,4 +1,4 @@
-package main.java.ru.clevertec.check;
+package main.java.ru.clevertec.check.Models;
 
 
 public class Item {
@@ -16,6 +16,7 @@ public class Item {
     private String Description;
 
     private Double Price;
+    
     private Integer QuantityInStock;
 
     private Boolean IsWholeSale;
