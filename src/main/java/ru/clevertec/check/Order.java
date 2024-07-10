@@ -4,11 +4,9 @@ import main.java.ru.clevertec.check.Discounts.CardDiscount;
 import main.java.ru.clevertec.check.Discounts.DiscountCards;
 import main.java.ru.clevertec.check.Discounts.WholeSaleDiscount;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class Order {
     public String DiscountCard;
@@ -30,6 +28,7 @@ public class Order {
         return _csvFileDiscountDataProvider.isDiscountCardValid(DiscountCard);
     }
 
+
     public double CalculateTotalItemPrice(OrderItem orderItem) {
         double totalPrice = 0.00;
         var wholeSaleDiscount = new WholeSaleDiscount();
@@ -49,13 +48,13 @@ public class Order {
     public double CalculateTotalItemDiscount(OrderItem orderItem) {
         var wholeSaleDiscount = new WholeSaleDiscount();
         var discountCard = new DiscountCards(DiscountCard);
-        var cardDiscount = new CardDiscount(discountCard);
+        var cardDiscount = new CardDiscount(discountCard)   ;
 
         if (wholeSaleDiscount.CanBeApplied(orderItem)) {
             wholeSaleDiscount.Apply(orderItem);
         } else if (cardDiscount.CanBeApplied(orderItem) && isDiscountCardValid()) {
             cardDiscount.Apply(orderItem);
-        }
+        } else {cardDiscount.Apply(orderItem);}
 
         return orderItem.DiscountPrice;
     }

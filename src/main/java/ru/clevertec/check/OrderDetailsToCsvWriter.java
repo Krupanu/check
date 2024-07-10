@@ -32,16 +32,13 @@ public class OrderDetailsToCsvWriter implements IOrderDetailsWriter {
             printWriter.println("");
             printWriter.println("QTU;DESCRIPTION;PRICE;DISCOUNT;TOTAL");
 
-            double totalDiscount = 0;
-            double totalPrice = 0;
+            double totalDiscount = 0.00;
+            double totalPrice = 0.00;
 
             for (Map.Entry<Integer, Integer> entry : idQuantityMap.entrySet()) {
                 int key = entry.getKey();
                 int quantity = entry.getValue();
                 Item item = order.GetItemById(key);
-
-                if (item == null) continue;
-
                 OrderItem orderItem = new OrderItem(item, quantity);
                 double itemDiscount = order.CalculateTotalItemDiscount(orderItem);
                 double itemTotal = order.CalculateTotalItemPrice(orderItem);
@@ -52,9 +49,8 @@ public class OrderDetailsToCsvWriter implements IOrderDetailsWriter {
                 printWriter.println(quantity + ";" + item.getDescription() + ";" + df.format(item.getPrice()) + "$;" + df.format(itemDiscount) + "$;" + df.format(itemTotal) + "$");
             }
             printWriter.println("");
-            printWriter.println("TOTAL PRICE;" + df.format(totalPrice) + "$");
-            printWriter.println("TOTAL DISCOUNT;" + df.format(totalDiscount) + "$");
-            printWriter.println("TOTAL WITH DISCOUNT;" + df.format(totalPrice - totalDiscount) + "$");
+            printWriter.println("TOTAL PRICE;TOTAL DISCOUNT;TOTAL WITH DISCOUNT;" );
+            printWriter.println(df.format(totalPrice) + "$;" + df.format(totalDiscount) + "$;" + df.format(totalPrice - totalDiscount) + "$");
 
             printWriter.close();
         } catch (Exception e) {

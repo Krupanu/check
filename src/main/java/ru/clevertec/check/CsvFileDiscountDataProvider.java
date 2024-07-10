@@ -8,10 +8,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CsvFileDiscountDataProvider implements IDataProvider<DiscountCards> {
     private final HashMap<String, DiscountCards> _discountCards;
+    public int _discountAmount ;
 
     public CsvFileDiscountDataProvider(String path) {
         _discountCards = new HashMap<>();
@@ -21,12 +21,12 @@ public class CsvFileDiscountDataProvider implements IDataProvider<DiscountCards>
     private void ReadFile(String path) {
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line ;
-            br.readLine();
             while ((line = br.readLine()) != null) {
                 String separator = ";";
                 String[] values = line.split(separator);
 
                 String DiscountCardNumber = values[0];
+
                 _discountCards.put(DiscountCardNumber, new DiscountCards(DiscountCardNumber));
             }
 
@@ -39,9 +39,10 @@ public class CsvFileDiscountDataProvider implements IDataProvider<DiscountCards>
         return _discountCards.containsKey(cardNumber);
     }
 
+
     @Override
     public DiscountCards Get(Integer id) {
-        return null; // Not used in this context
+        return null;
     }
 
     @Override

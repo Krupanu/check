@@ -48,12 +48,9 @@ public class CheckRunner {
             }
 
 
-            // Запись данных заказа в файлы
-            var detailsWriterExcel = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\productsTest.csv", idQuantityMap);
-            var detailsWriterTxt = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\result.csv.txt", idQuantityMap);
 
+            var detailsWriterTxt = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\result.csv.txt", idQuantityMap);
             detailsWriterTxt.Write(order);
-            detailsWriterExcel.Write(order);
         } catch (Exception e) {
             System.out.println("ERROR!");
             e.printStackTrace();
