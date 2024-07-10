@@ -1,7 +1,7 @@
 package main.java.ru.clevertec.check.Discounts;
 
-import Abstractions.IDiscount;
-import main.java.ru.clevertec.check.OrderItem;
+import main.java.ru.clevertec.check.Abstractions.IDiscount;
+import main.java.ru.clevertec.check.Models.OrderItem;
 
 public class WholeSaleDiscount implements IDiscount {
 

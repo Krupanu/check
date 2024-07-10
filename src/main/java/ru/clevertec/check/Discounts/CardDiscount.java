@@ -1,12 +1,12 @@
 package main.java.ru.clevertec.check.Discounts;
 
-import Abstractions.IDiscount;
-import main.java.ru.clevertec.check.OrderItem;
+import main.java.ru.clevertec.check.Abstractions.IDiscount;
+import main.java.ru.clevertec.check.Models.OrderItem;
 
 public class CardDiscount implements IDiscount {
-    private final DiscountCards _discountCard;
+    private final DiscountCard _discountCard;
 
-    public CardDiscount(DiscountCards discountCard) {
+    public CardDiscount(DiscountCard discountCard) {
         _discountCard = discountCard;
     }
 
