@@ -1,15 +1,42 @@
 package main.java.ru.clevertec.check;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class CheckRunner {
     public static void main(String[] args) {
         try {
+
+            String pathToProductsFile = "";
+            String pathToDiscountCardsFile = "";
+            String pathToResultFile = "";
+            for (String arg : args) {
+                if (arg.contains("=")) {
+                    var parts = arg.split("=");
+                    var key = parts[0];
+                    var value = parts[1];
+
+                    if (Objects.equals(key, "pathToProductsFile")) {
+                        pathToProductsFile = value;
+                    }
+                    if (Objects.equals(key, "pathToDiscountCardsFile")) {
+                        pathToDiscountCardsFile = value;
+                    }
+                    if (Objects.equals(key, "pathToResultFile")) {
+                        pathToResultFile = value;
+                    }
+            }
+            }
             var idQuantityMap = new HashMap<Integer, Integer>();
 
-            var csvFileItemDataProvider = new CsvFileItemDataProvider("C:\\github\\check\\src\\main\\resources\\products.csv");
-            var csvFileDiscountDataProvider = new CsvFileDiscountDataProvider("C:\\github\\check\\src\\main\\resources\\discountCards.csv");
+            var csvFileItemDataProvider = new CsvFileItemDataProvider(pathToProductsFile);
+            var csvFileDiscountDataProvider = new CsvFileDiscountDataProvider(pathToDiscountCardsFile);
 
             var order = new Order(csvFileDiscountDataProvider);
 
@@ -47,16 +74,62 @@ public class CheckRunner {
                 order.AddItem(new OrderItem(csvFileItemDataProvider.Get(entry.getKey()), entry.getValue()));
             }
 
+            var detailsWriter = new OrderDetailsToCsvWriter(pathToResultFile, idQuantityMap);
+            double totalPrice = 0;
+            for (Map.Entry<Integer, Integer> entry : idQuantityMap.entrySet())    {
+                int key = entry.getKey();
+                int quantity = entry.getValue();
+                Item item = order.GetItemById(key);
+                OrderItem orderItem = new OrderItem(item, quantity);
+                double itemTotal = order.CalculateTotalItemPrice(orderItem);
+                totalPrice += itemTotal;
+            }
+            if (totalPrice > order.Balance) {
+                System.out.println("Data has been written");
+                detailsWriter.WriteNoBalance();
+                System.exit(0);}
+            detailsWriter.Write(order);
+        }
+        catch (NumberFormatException e){
+            var idQuantityMap = new HashMap<Integer, Integer>();
+            String pathToResultFile = "";
+            for (String arg : args) {
+                if (arg.contains("=")) {
+                    var parts = arg.split("=");
+                    var key = parts[0];
+                    var value = parts[1];
+                    if (Objects.equals(key, "pathToResultFile")) {
+                        pathToResultFile = value;
+                    }
+                }
+            }
+                var detailsWriter = new OrderDetailsToCsvWriter(pathToResultFile, idQuantityMap);
+                detailsWriter.WriteException("BAD REQUEST");
+                System.out.println("ERROR");
+                System.out.println("Data has been written");
+                System.exit(0);
 
+        }
 
-            var detailsWriterTxt = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\result.csv.txt", idQuantityMap);
-            detailsWriterTxt.Write(order);
-        } catch (Exception e) {
-            System.out.println("ERROR!");
-            e.printStackTrace();
+        catch (Exception e) {
+            var idQuantityMap = new HashMap<Integer, Integer>();
+            String pathToResultFile = "";
+            for (String arg : args) {
+                if (arg.contains("=")) {
+                    var parts = arg.split("=");
+                    var key = parts[0];
+                    var value = parts[1];
+                    if (Objects.equals(key, "pathToResultFile")) {
+                        pathToResultFile = value;
+                    }
+                }
+            }
+            var detailsWriter = new OrderDetailsToCsvWriter(pathToResultFile, idQuantityMap);
+            detailsWriter.WriteException("INTERNAL SERVER ERROR");
+            System.out.println("ERROR");
+            System.out.println("Data has been written");
             System.exit(0);
         }
-        System.out.println("Success!");
         System.out.println("Data has been written!");
     }
 }

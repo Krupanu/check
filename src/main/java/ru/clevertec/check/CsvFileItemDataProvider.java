@@ -2,8 +2,10 @@ package main.java.ru.clevertec.check;
 import Abstractions.IDataProvider;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,7 +36,15 @@ public class CsvFileItemDataProvider implements IDataProvider<Item> {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("ERROR");
+            String exceptionResultFilePath = "C:\\github\\check";
+            String fileName = "result.csv.txt";
+            String fullPath = Paths.get(exceptionResultFilePath, fileName).toString();
+            String textToFile = "BAD REQUEST";
+            var exceptionWriter = new ExceptionWriter();
+            exceptionWriter.WriteExceptionToCsv("BAD REQUEST",exceptionResultFilePath);
+            System.out.println("Data has been written");
+            System.exit(0);
         }
     }
 

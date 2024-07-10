@@ -28,11 +28,10 @@ public class Order {
         return _csvFileDiscountDataProvider.isDiscountCardValid(DiscountCard);
     }
 
-
     public double CalculateTotalItemPrice(OrderItem orderItem) {
-        double totalPrice = 0.00;
+        double totalPrice;
         var wholeSaleDiscount = new WholeSaleDiscount();
-        var discountCard = new DiscountCards(DiscountCard);
+        var discountCard = _csvFileDiscountDataProvider.getDiscountCard(DiscountCard);
         var cardDiscount = new CardDiscount(discountCard);
 
         if (wholeSaleDiscount.CanBeApplied(orderItem)) {
@@ -47,14 +46,14 @@ public class Order {
 
     public double CalculateTotalItemDiscount(OrderItem orderItem) {
         var wholeSaleDiscount = new WholeSaleDiscount();
-        var discountCard = new DiscountCards(DiscountCard);
-        var cardDiscount = new CardDiscount(discountCard)   ;
+        var discountCard = _csvFileDiscountDataProvider.getDiscountCard(DiscountCard);
+        var cardDiscount = new CardDiscount(discountCard);
 
         if (wholeSaleDiscount.CanBeApplied(orderItem)) {
             wholeSaleDiscount.Apply(orderItem);
         } else if (cardDiscount.CanBeApplied(orderItem) && isDiscountCardValid()) {
             cardDiscount.Apply(orderItem);
-        } else {cardDiscount.Apply(orderItem);}
+        }
 
         return orderItem.DiscountPrice;
     }
@@ -68,4 +67,3 @@ public class Order {
         return null;
     }
 }
-

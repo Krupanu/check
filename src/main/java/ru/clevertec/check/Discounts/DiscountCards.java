@@ -1,19 +1,19 @@
 package main.java.ru.clevertec.check.Discounts;
 
-import java.util.Map;
-
 public class DiscountCards {
-    public DiscountCards( String discountCardNumber){
+    private final String _discountCardNumber;
+    private final int _discountPercentage;
+
+    public DiscountCards(String discountCardNumber, int discountPercentage) {
         _discountCardNumber = discountCardNumber;
+        _discountPercentage = discountPercentage;
     }
-    private Integer Id;
-    public double DiscountPrice;
-    private  final String _discountCardNumber;
-    public Integer getId() {
-        return Id;
-    }
+
     public String getDiscountCardNumber() {
         return _discountCardNumber;
     }
 
+    public int getDiscountPercentage() {
+        return _discountPercentage;
+    }
 }

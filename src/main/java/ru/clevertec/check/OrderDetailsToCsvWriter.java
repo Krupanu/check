@@ -1,11 +1,10 @@
 package main.java.ru.clevertec.check;
 
 import Abstractions.IOrderDetailsWriter;
-import main.java.ru.clevertec.check.Discounts.DiscountCards;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+
+import java.io.*;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Map;
 
@@ -32,8 +31,8 @@ public class OrderDetailsToCsvWriter implements IOrderDetailsWriter {
             printWriter.println("");
             printWriter.println("QTU;DESCRIPTION;PRICE;DISCOUNT;TOTAL");
 
-            double totalDiscount = 0.00;
-            double totalPrice = 0.00;
+            double totalDiscount = 0;
+            double totalPrice = 0;
 
             for (Map.Entry<Integer, Integer> entry : idQuantityMap.entrySet()) {
                 int key = entry.getKey();
@@ -53,9 +52,19 @@ public class OrderDetailsToCsvWriter implements IOrderDetailsWriter {
             printWriter.println(df.format(totalPrice) + "$;" + df.format(totalDiscount) + "$;" + df.format(totalPrice - totalDiscount) + "$");
 
             printWriter.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
+        } catch (FileNotFoundException e) {
+            System.out.println("ERROR");
+            String exceptionResultFilePath = "C:\\github\\check";
+            String fileName = "errorResult.csv.txt";
+            String fullPath = Paths.get(exceptionResultFilePath, fileName).toString();
+            String textToFile = "BAD REQUEST";
+            var exceptionWriter = new ExceptionWriter();
+            exceptionWriter.WriteExceptionToCsv("BAD REQUEST",exceptionResultFilePath);
+            System.out.println("Data has been written");
+            System.exit(0);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return 1;
@@ -71,7 +80,32 @@ public class OrderDetailsToCsvWriter implements IOrderDetailsWriter {
 
             printWriter.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("ERROR");
+            System.exit(0);
         }
     }
-}
+
+    public void WriteException(String exceptionReason) {
+        try {
+
+            FileWriter outputFile = new FileWriter("C:\\github\\check\\result.csv.txt");
+            PrintWriter printWriter = new PrintWriter(outputFile);
+
+            printWriter.println("ERROR");
+            printWriter.println(exceptionReason);
+
+            printWriter.close();
+        } catch (Exception e) {
+            System.out.println("ERROR");
+            String exceptionResultFilePath = "C:\\github\\check";
+            String fileName = "errorResult.csv.txt";
+            String fullPath = Paths.get(exceptionResultFilePath, fileName).toString();
+            String textToFile = "BAD REQUEST";
+            var exceptionWriter = new ExceptionWriter();
+            exceptionWriter.WriteExceptionToCsv("BAD REQUEST",exceptionResultFilePath);
+            System.out.println("Data has been written");
+            System.exit(0);
+        }
+    }
+    }
+
