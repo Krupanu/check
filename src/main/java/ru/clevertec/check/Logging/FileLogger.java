@@ -21,7 +21,7 @@ public class FileLogger implements ILogger {
     @Override
     public void logError(String message) {
         try {
-            var fileWriter = new FileWriter(filename, true);
+            var fileWriter = new FileWriter(filename, false);
             var writer = new PrintWriter(fileWriter);
 
             writer.println("ERROR");
