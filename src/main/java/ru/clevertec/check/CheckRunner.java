@@ -18,26 +18,14 @@ public class CheckRunner {
     private final static ConsolidateLogger _logger = new ConsolidateLogger();
 
     public static void main(String[] args) {
-        var settings = ReadSettingFromInput(args);
+        var settings = new Settings();
         
         ILogger consoleLogger = new ConsoleLogger();
-        ILogger fileLogger = new FileLogger(settings.PathToResultFile.isBlank() ? FileConstants.DefaultResultFilePath : settings.PathToResultFile);
+        ILogger fileLogger = new FileLogger(FileConstants.DefaultResultFilePath);
         _logger.Register(consoleLogger);
         _logger.Register(fileLogger);
 
         try {
-            if (settings.PathToProductsFile.isBlank()) {
-                _logger.logInfo("Path to a product file was not provided");
-                _logger.logError("BAD REQUEST");
-                return;
-            }
-
-            if (settings.PathToResultFile.isBlank()) {
-                _logger.logInfo("Path to a result file was not provided");
-                _logger.logError("BAD REQUEST");
-                return;
-            }
-
             var orderInput = ReadOrderDataFromInput(args);
 
             var csvFileItemDataProvider = new CsvFileItemDataProvider(settings.PathToProductsFile, _logger);
@@ -80,30 +68,6 @@ public class CheckRunner {
             _logger.logError(ErrorCodes.InternalServerError);
             System.exit(0);
         }
-    }
-
-    private static Settings ReadSettingFromInput(String[] args) {
-        var settings = new Settings();
-
-        for (String arg : args) {
-            if (arg.contains("=")) {
-                var parts = arg.split("=");
-                var key = parts[0];
-                var value = parts[1];
-
-                if (Objects.equals(key, InputParamsConstants.PathToProductsFile)) {
-                    settings.PathToProductsFile = value;
-                }
-                if (Objects.equals(key, InputParamsConstants.PathToDiscountCardsFile)) {
-                    settings.PathToDiscountCardsFile = value;
-                }
-                if (Objects.equals(key, InputParamsConstants.PathToResultFile)) {
-                    settings.PathToResultFile = value;
-                }
-            }
-        }
-
-        return settings;
     }
 
     private static OrderInput ReadOrderDataFromInput(String[] args) {
