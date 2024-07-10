@@ -1,20 +1,20 @@
 package main.java.ru.clevertec.check;
-import java.io.EOFException;
+
 import java.util.HashMap;
 import java.util.Objects;
-import Abstractions.IDataProvider;
 
 public class CheckRunner {
     public static void main(String[] args) {
         try {
             var idQuantityMap = new HashMap<Integer, Integer>();
-            var order = new Order();
+
             var csvFileItemDataProvider = new CsvFileItemDataProvider("C:\\github\\check\\src\\main\\resources\\products.csv");
-//        var csvFileDiscountDataProvider = new CsvFileDiscountDataProvider("C:\\github\\check\\src\\main\\resources\\discountCards.csv");
-            //сделать вывод данных, разобраться с скидочными картами, разобраться с 0.03 вместо 0.30 в скидке за бананы
-            //подключить ввод через консоль(удалить DumbStore...), написать записку
+            var csvFileDiscountDataProvider = new CsvFileDiscountDataProvider("C:\\github\\check\\src\\main\\resources\\discountCards.csv");
+
+            var order = new Order(csvFileDiscountDataProvider);
+
             for (String arg : args) {
-                //Parse items and quantity
+                // Parse items and quantity
                 if (arg.contains("-")) {
                     var parts = arg.split("-");
                     var key = Integer.parseInt(parts[0]);
@@ -27,7 +27,7 @@ public class CheckRunner {
                     }
                 }
 
-                //Parse discount card
+                // Parse discount card
                 if (arg.contains("=")) {
                     var parts = arg.split("=");
                     var key = parts[0];
@@ -47,19 +47,19 @@ public class CheckRunner {
                 order.AddItem(new OrderItem(csvFileItemDataProvider.Get(entry.getKey()), entry.getValue()));
             }
 
-//        order.CalculateOrder();
+
+            // Запись данных заказа в файлы
             var detailsWriterExcel = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\productsTest.csv", idQuantityMap);
             var detailsWriterTxt = new OrderDetailsToCsvWriter("C:\\github\\check\\src\\main\\resources\\result.csv.txt", idQuantityMap);
 
             detailsWriterTxt.Write(order);
             detailsWriterExcel.Write(order);
-//        detailsWriter.WriteOrder();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("ERROR!");
+            e.printStackTrace();
             System.exit(0);
         }
         System.out.println("Success!");
         System.out.println("Data has been written!");
-        }
+    }
 }
-

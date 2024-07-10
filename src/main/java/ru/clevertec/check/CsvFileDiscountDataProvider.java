@@ -1,16 +1,17 @@
 package main.java.ru.clevertec.check;
 
 import Abstractions.IDataProvider;
+import main.java.ru.clevertec.check.Discounts.DiscountCards;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-    public class CsvFileDiscountDataProvider implements IDataProvider<Item> {
-
-    private final HashMap<Integer, Item> _discountCards;
+public class CsvFileDiscountDataProvider implements IDataProvider<DiscountCards> {
+    private final HashMap<String, DiscountCards> _discountCards;
 
     public CsvFileDiscountDataProvider(String path) {
         _discountCards = new HashMap<>();
@@ -25,13 +26,8 @@ import java.util.List;
                 String separator = ";";
                 String[] values = line.split(separator);
 
-                int id = Integer.parseInt(values[0]);
-                String description = values[1];
-                double price = Double.parseDouble(values[2]);
-                int quantityInStock = Integer.parseInt(values[3]);
-                boolean wholesaleProduct = Boolean.parseBoolean(values[4]);
-
-                _discountCards.put(id, new Item(id, description, price, quantityInStock, wholesaleProduct));
+                String DiscountCardNumber = values[0];
+                _discountCards.put(DiscountCardNumber, new DiscountCards(DiscountCardNumber));
             }
 
         } catch (IOException e) {
@@ -39,13 +35,17 @@ import java.util.List;
         }
     }
 
-    @Override
-    public Item Get(Integer id) {
-        return _discountCards.get(id);
+    public boolean isDiscountCardValid(String cardNumber) {
+        return _discountCards.containsKey(cardNumber);
     }
 
     @Override
-    public List<Item> GetAll() {
+    public DiscountCards Get(Integer id) {
+        return null; // Not used in this context
+    }
+
+    @Override
+    public List<DiscountCards> GetAll() {
         return _discountCards.values().stream().toList();
     }
 }
