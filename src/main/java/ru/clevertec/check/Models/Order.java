@@ -1,6 +1,7 @@
 package main.java.ru.clevertec.check.Models;
 
 import main.java.ru.clevertec.check.Abstractions.ILogger;
+import main.java.ru.clevertec.check.Constants.ErrorCodes;
 import main.java.ru.clevertec.check.Discounts.DiscountCard;
 import main.java.ru.clevertec.check.Services.CsvFileDiscountDataProvider;
 import main.java.ru.clevertec.check.Discounts.CardDiscount;
@@ -15,7 +16,8 @@ public class Order {
     private double Balance = 0;
     public List<OrderItem> Items = new ArrayList<>();
     private final Date CreatedDate = new Date();
-    private double TotalDiscount = 0;
+    private double TotalPrice;
+    private double TotalDiscount;
     private final CsvFileDiscountDataProvider _csvFileDiscountDataProvider;
     private final ILogger _logger;
 
@@ -30,6 +32,35 @@ public class Order {
 
     public List<OrderItem> GetItems() {
         return Items;
+    }
+    
+    public void Calculate() {
+        double totalPrice = 0;
+        double totalDiscount = 0;
+        var wholeSaleDiscount = new WholeSaleDiscount();
+        var cardDiscount = new CardDiscount(DiscountCard);
+        
+        for(var orderItem : Items) {
+            if (wholeSaleDiscount.CanBeApplied(orderItem)) {
+                wholeSaleDiscount.Apply(orderItem);
+            } else if (cardDiscount.CanBeApplied(orderItem)) {
+                cardDiscount.Apply(orderItem);
+            }
+
+            totalPrice += orderItem.GetFullPrice();
+            totalDiscount += orderItem.DiscountPrice;
+        }
+        
+        TotalPrice = totalPrice;
+        _logger.logInfo("Total price is " + totalPrice);
+        TotalDiscount = totalDiscount;
+        _logger.logInfo("Total discount is " + totalDiscount);
+
+        if (totalPrice > Balance) {
+            _logger.logInfo("Not enough money");
+            _logger.logError(ErrorCodes.NotEnoughMoney);
+            System.exit(0);
+        }
     }
     
     public double CalculateTotalItemPrice(OrderItem orderItem) {
@@ -60,15 +91,6 @@ public class Order {
         return orderItem.DiscountPrice;
     }
 
-    public Item GetItemById(int id) {
-        for (OrderItem orderItem : Items) {
-            if (orderItem.getItem().getId() == id) {
-                return orderItem.getItem();
-            }
-        }
-        return null;
-    }
-
     public void SetDiscountCard(String cardNumber) {
         var defaultDiscount = 2;
         var card = _csvFileDiscountDataProvider.GetByCardNumber(cardNumber);
@@ -90,5 +112,13 @@ public class Order {
     
     public Date GetCreatedDate() {
         return CreatedDate;
+    }
+
+    public double GetTotalPrice() {
+        return TotalPrice;
+    }
+
+    public double GetTotalDiscount() {
+        return TotalDiscount;
     }
 }

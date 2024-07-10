@@ -34,21 +34,12 @@ public class OrderDetailsToCsvWriter implements IOrderDetailsWriter {
             printWriter.println();
             printWriter.println("QTU;DESCRIPTION;PRICE;DISCOUNT;TOTAL");
 
-            double totalDiscount = 0;
-            double totalPrice = 0;
-
             for (var orderItem : order.GetItems()) {
-                double itemDiscount = order.CalculateTotalItemDiscount(orderItem);
-                double itemTotal = order.CalculateTotalItemPrice(orderItem);
-
-                totalDiscount += itemDiscount;
-                totalPrice += itemTotal;
-
-                printWriter.println(orderItem.Amount + ";" + orderItem.Item.getDescription() + ";" + df.format(orderItem.Item.getPrice()) + "$;" + df.format(itemDiscount) + "$;" + df.format(itemTotal) + "$");
+                printWriter.println(orderItem.Amount + ";" + orderItem.Item.getDescription() + ";" + df.format(orderItem.Item.getPrice()) + "$;" + df.format(orderItem.DiscountPrice) + "$;" + df.format(orderItem.GetFullPrice()) + "$");
             }
             printWriter.println("");
             printWriter.println("TOTAL PRICE;TOTAL DISCOUNT;TOTAL WITH DISCOUNT");
-            printWriter.println(df.format(totalPrice) + "$;" + df.format(totalDiscount) + "$;" + df.format(totalPrice - totalDiscount) + "$");
+            printWriter.println(df.format(order.GetTotalPrice()) + "$;" + df.format(order.GetTotalDiscount()) + "$;" + df.format(order.GetTotalPrice() - order.GetTotalDiscount()) + "$");
 
             printWriter.close();
 

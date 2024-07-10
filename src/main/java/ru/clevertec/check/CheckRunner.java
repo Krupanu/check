@@ -53,6 +53,12 @@ public class CheckRunner {
                     _logger.logError(ErrorCodes.BadRequest);
                     System.exit(0);
                 }
+                
+                if(entry.getValue() > itemDetails.getQuantityInStock()) {
+                    _logger.logInfo("Not enough items with id : " + entry.getKey());
+                    _logger.logError(ErrorCodes.BadRequest);
+                    System.exit(0);
+                }
 
                 order.AddItem(new OrderItem(itemDetails, entry.getValue()));
                 _logger.logInfo("Item was added to an order. Id: " + entry.getKey());
@@ -60,23 +66,15 @@ public class CheckRunner {
             
             order.SetDiscountCard(orderInput.GetDiscountCardNumber());
             order.SetBalance(orderInput.GetBalance());
-
-            var detailsWriter = new OrderDetailsToCsvWriter(settings.PathToResultFile, _logger);
-            double totalPrice = 0;
-            for (var orderItem : order.GetItems()) {
-                double itemTotal = order.CalculateTotalItemPrice(orderItem);
-                totalPrice += itemTotal;
-            }
-            if (totalPrice > order.getBalance()) {
-                _logger.logInfo("Not enough money");
-                _logger.logError(ErrorCodes.NotEnoughMoney);
-                System.exit(0);
-            }
-
+            
+            order.Calculate();
+            
             _logger.logInfo("Order calculation ended");
             _logger.logInfo("");
-            
+
+            var detailsWriter = new OrderDetailsToCsvWriter(settings.PathToResultFile, _logger);
             detailsWriter.Write(order);
+            
         } catch (Exception e) {
             _logger.logInfo("Smth is wrong in order calculation");
             _logger.logError(ErrorCodes.InternalServerError);

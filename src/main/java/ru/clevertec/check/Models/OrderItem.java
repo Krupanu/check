@@ -11,8 +11,7 @@ public class OrderItem {
     }
     
     public double GetFullPrice() {
-        double fullPrice = Item.getPrice() * Amount;
-        return fullPrice;
+        return Item.getPrice() * Amount;
     }
 
     public Item getItem() {

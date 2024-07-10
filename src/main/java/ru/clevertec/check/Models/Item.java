@@ -52,5 +52,9 @@ public class Item {
     public void setWholeSale(Boolean wholeSale) {
         IsWholeSale = wholeSale;
     }
+    
+    public int getQuantityInStock() {
+        return QuantityInStock;
+    }
 
 }
